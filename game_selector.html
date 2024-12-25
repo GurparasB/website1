@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Selection</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-menu {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 800px;
+        }
+
+        .game-option {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .game-option:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .game-option h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #4CAF50;
+        }
+
+        .game-option p {
+            margin: 10px 0 0 0;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .home-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-button" onclick="location.href='index.html'">Home</button>
+    <div class="game-menu">
+        <h1>Select a Game</h1>
+        <div class="game-grid">
+            <div class="game-option" onclick="location.href='snake.html'">
+                <h2>Snake</h2>
+                <p>Classic snake game</p>
+            </div>
+            <div class="game-option" onclick="location.href='game2.html'">
+                <h2>Game 2</h2>
+                <p>A challenging puzzle game</p>
+            </div>
+            <div class="game-option" onclick="location.href='game3.html'">
+                <h2>Game 3</h2>
+                <p>A fast-paced action game</p>
+            </div>
+            <div class="game-option" onclick="location.href='game4.html'">
+                <h2>Game 4</h2>
+                <p>A strategic board game</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
