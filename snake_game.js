@@ -1,11 +1,12 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+const highScoreElement = document.getElementById('high-score');
 
 let snake = [
-    {x: 200, y: 200},
-    {x: 190, y: 200},
-    {x: 180, y: 200}
+    { x: 200, y: 200 },
+    { x: 190, y: 200 },
+    { x: 180, y: 200 },
 ];
 
 let dx = 10;
@@ -13,6 +14,10 @@ let dy = 0;
 let foodX;
 let foodY;
 let score = 0;
+
+// Initialize high score from localStorage
+let highScore = parseInt(localStorage.getItem('snakeHighScore')) || 0;
+highScoreElement.innerHTML = `High Score: ${highScore}`;
 
 function generateFood() {
     foodX = Math.floor(Math.random() * (canvas.width / 10)) * 10;
@@ -25,13 +30,20 @@ function drawFood() {
 }
 
 function moveSnake() {
-    const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
     snake.unshift(head);
 
     if (head.x === foodX && head.y === foodY) {
         score += 10;
         scoreElement.innerHTML = `Score: ${score}`;
         generateFood();
+
+        // Check if the score is a new high score
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('snakeHighScore', highScore.toString());
+            highScoreElement.innerHTML = `High Score: ${highScore}`;
+        }
     } else {
         snake.pop();
     }
@@ -65,7 +77,7 @@ function checkCollision() {
 }
 
 document.addEventListener('keydown', (event) => {
-    switch(event.key) {
+    switch (event.key) {
         case 'ArrowUp':
             if (dy === 0) {
                 dx = 0;
@@ -107,10 +119,10 @@ function gameOver() {
     overlay.style.alignItems = 'center';
     overlay.style.zIndex = '1000';
 
-    let highScore = localStorage.getItem('snakeHighScore') || 0;
+    let highScore = parseInt(localStorage.getItem('snakeHighScore')) || 0;
     if (score > highScore) {
         highScore = score;
-        localStorage.setItem('snakeHighScore', highScore);
+        localStorage.setItem('snakeHighScore', highScore.toString());
     }
 
     const message = document.createElement('div');
@@ -122,14 +134,18 @@ function gameOver() {
         <h2>Game Over!</h2>
         <p>Your Score: ${score}</p>
         <p>High Score: ${highScore}</p>
-        <button onclick="restartGame()">Play Again</button>
-        <button onclick="window.location.href='game_selector.html'">Home</button>
+        <button id="playAgainBtn">Play Again</button>
+        <button id="homeBtn">Home</button>
     `;
 
     overlay.appendChild(message);
     document.body.appendChild(overlay);
-}
 
+    document.getElementById('playAgainBtn').addEventListener('click', restartGame);
+    document.getElementById('homeBtn').addEventListener('click', () => {
+        window.location.href = 'game_selector.html';
+    });
+}
 function restartGame() {
     const overlay = document.getElementById('overlay');
     if (overlay) {
@@ -137,9 +153,9 @@ function restartGame() {
     }
 
     snake = [
-        {x: 200, y: 200},
-        {x: 190, y: 200},
-        {x: 180, y: 200}
+        { x: 200, y: 200 },
+        { x: 190, y: 200 },
+        { x: 180, y: 200 },
     ];
     dx = 10;
     dy = 0;

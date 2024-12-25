@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple Snake Game</title>
+    <title>Snake Game</title>
     <link rel="stylesheet" href="snake_styles.css">
 </head>
 <body>
-    <div id="score">Score: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-
-    <!-- Link to the external JavaScript file -->
+    <button class="home-button" onclick="window.location.href='game_selector.html'">Return</button>
+    <div id="game-container">
+        <h1 class="title">Snake Game</h1>
+        <div id="score">Score: 0</div>
+        <div id="high-score">High Score: 0</div>
+        <div id="game-board">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+        </div>
+        <div id="controls">
+        </div>
+        <div id="game-over">Game Over</div>
+    </div>
     <script src="snake_game.js"></script>
 </body>
 </html>
+
+
