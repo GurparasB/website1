@@ -1,0 +1,20 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "website",
+  "main": "script_tic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GurparasB/website1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GurparasB/website1/issues"
+  },
+  "homepage": "https://github.com/GurparasB/website1#readme"
+}
