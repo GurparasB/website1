@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMode = ''; // 'singlePlayer' or 'twoPlayer'
 
     document.getElementById('homeButton').addEventListener('click', () => {
-        window.location.href = 'game_selector.html'; // Replace 'index.html' with your desired home page URL
+        window.location.href = '../game_selector.html'; // Replace 'index.html' with your desired home page URL
     });
 
     singlePlayerButton.addEventListener('click', () => {

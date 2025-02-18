@@ -67,34 +67,30 @@
             background-color: #45a049;
         }
     </style>
-    <button id="homeButton" class="home-button">Return</button>
-</head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-623448YG4J"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-623448YG4J');
-</script>
-
 </head>
 <body>
+    <!-- Home Button -->
+    <button id="homeButton" class="home-button">Return</button>
+
     <div class="game-container">
+        <!-- Mode Selection -->
         <div class="mode-selection">
             <button id="singlePlayer">Single Player</button>
             <button id="twoPlayer">Two Player</button>
         </div>
+
+        <!-- Scoreboard -->
         <div class="scoreboard" id="twoPlayerScoreboard">
             <div id="playerOneScore"></div> 
-             <div id="playerTwoScore"></div>
+            <div id="playerTwoScore"></div>
         </div>
+
         <div class="scoreboard" id="singlePlayerScoreboard" style="display: none;">
             <div id="singlePlayerOneScore"></div>
             <div id="machineScore"></div>
         </div>
-        
+
+        <!-- Game Board -->
         <div class="board" id="board">
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
@@ -106,9 +102,13 @@
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
         </div>
+
+        <!-- Restart Button -->
         <div class="game-info" id="game-info">
             <button id="restartButton">Restart Game</button>
         </div>
+
+        <!-- Game Over Modal -->
         <div id="gameOverModal" class="modal">
             <div class="modal-content">
                 <p id="winnerMessage"></p>
@@ -116,6 +116,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Redirect to the game_selector page when the "Return" button is clicked
+        document.getElementById("homeButton").addEventListener("click", function() {
+            window.location.href = "../game_selector.html"; // Redirect to the game selector
+        });
+    </script>
+
     <script src="script_tic.js"></script>
 </body>
 </html>
