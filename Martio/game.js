@@ -199,7 +199,7 @@ window.addEventListener("keyup", function(e) {
   keys[e.key] = false;
 });
 
-var scrollThreshold = canvas.width / 2; // Start scrolling when Mario is halfway across the canvas
+var scrollThreshold = canvas.width / 3; // Start scrolling when Mario is halfway across the canvas
 
 function checkKeys() {
   if (keys["ArrowLeft"] || keys["a"]) {
