@@ -8,7 +8,7 @@ var mario = {
   width: 20,
   height: 50,
   speed: 0, // speed
-  maxSpeed: 3, // max speed
+  maxSpeed: 2.5, // max speed
   acceleration: 0.1, // Acc rate
   deceleration: 0.1, // Deacc rate
   vy: 0, // vertical velocity
@@ -39,7 +39,7 @@ function drawMario() {
 
 function drawParkour() {
   // Set the fill style to green for parkour platforms
-  ctx.fillStyle = "green";
+  ctx.fillStyle = "blue";
   // Loop through each parkour platform and draw it
   parkour.forEach(function(platform) {
     ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
