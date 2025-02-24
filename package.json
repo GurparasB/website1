@@ -4,7 +4,9 @@
   "description": "website",
   "main": "script_tic.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "start": "node script_tic.js",
+  "build": "echo 'Build step not required for this project'",
+  "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
