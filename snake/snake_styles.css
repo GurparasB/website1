@@ -124,11 +124,8 @@ button:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
-    z-index: 1000;
+    transition: background-color 0.2s;
 }
-
 .home-button:hover {
     background-color: #45a049;
-    transform: scale(1.05);
 }
