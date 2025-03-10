@@ -143,7 +143,7 @@ function gameOver() {
 
     document.getElementById('playAgainBtn').addEventListener('click', restartGame);
     document.getElementById('homeBtn').addEventListener('click', () => {
-        window.location.href = 'game_selector.html';
+        window.location.href = '../game_selector.html';
     });
 }
 function restartGame() {
