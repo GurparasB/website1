@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./node_modules/nes.css/css/nes.min.css">
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        :root {
+            --bg-color: white;
+            --text-color: black;
+            --input-bg: #f0f0f0;
+            --border-color: black;
+        }
+
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: white;
+            --input-bg: #1e1e1e;
+            --border-color: white;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        #themeToggleButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+
+        #messages {
+            border: 1px solid var(--border-color);
+            height: 200px;
+            overflow-y: scroll;
+            padding: 10px;
+            background-color: var(--input-bg);
+        }
+
+        .message {
+            margin: 5px 0;
+        }
+
+        .message p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="nes-btn" id="themeToggleButton">🌙 Dark Mode</button>
+
+    <h2>Chat</h2>
+
+    <div>
+        <label for="username">Enter your username:</label>
+        <input type="text" id="username" class="nes-input" placeholder="Your username" style="width: 300px; height: 25px;"/>
+    </div>
+
+    <div>
+        <label for="room">Enter Room Code:</label>
+        <input type="text" id="room" placeholder="Room Code" class="nes-input" style="width: 300px; height: 25px;"/>
+        <button class="nes-btn" style="height: 40px; width: 200px" id="createRoomButton">Create Room</button>
+        <button class="nes-btn" style="height: 40px; width: 200px" id="joinRoomButton">Join Room</button>
+    </div>
+
+    <div>
+        <h3>Live Messages</h3>
+        <div id="messages"></div>
+        <input type="text" id="message" placeholder="Type a message..." class="nes-input" style="display: none;" />
+        <button class="nes-btn" id="sendMessageButton" style="display: none; height: 40px; width: 200px">Send</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, set, child, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJPBfftjOp7jatGR7Uk_2XT1NnSjLEM1Q",
+            authDomain: "gurparasbajwa-36063.firebaseapp.com",
+            databaseURL: "https://gurparasbajwa-36063-default-rtdb.firebaseio.com/",
+            projectId: "gurparasbajwa-36063",
+            storageBucket: "gurparasbajwa-36063.appspot.com",
+            messagingSenderId: "1066269808699",
+            appId: "1:1066269808699:web:af3aa005990c63be3e641e",
+            measurementId: "G-5YYLLWJ1GM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let currentRoom = '';
+        let username = '';
+        let userColor = '';
+
+        // Predefined color palette for users
+        const colorPalette = [
+            '#FF5733', // Red
+            '#33FF57', // Green
+            '#3357FF', // Blue
+            '#F1C40F', // Yellow
+            '#8E44AD', // Purple
+            '#E67E22', // Orange
+            '#2ECC71', // Light Green
+            '#3498DB', // Light Blue
+            '#E74C3C', // Light Red
+            '#1ABC9C'  // Teal
+        ];
+
+        function getRandomColor() {
+            const randomIndex = Math.floor(Math.random() * colorPalette.length);
+            return colorPalette[randomIndex]; // Select a random color from the palette
+        }
+
+        function createRoom() {
+            username = document.getElementById("username").value.trim();
+            currentRoom = document.getElementById("room").value.trim();
+            if (!username || !currentRoom) {
+                alert("Username and room code are required.");
+                return;
+            }
+
+            userColor = getRandomColor(); // Get a random color for the user
+            const roomRef = ref(db, `rooms/${currentRoom}`);
+
+            get(roomRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert("Room already exists. Please join it instead.");
+                } else {
+                    set(roomRef, {
+                        created_by: username,
+                        messages: {}
+                    }).then(() => {
+                        alert("Room created successfully! You can now send messages.");
+                        listenForMessages();
+                    });
+                }
+            });
+        }
+
+        function joinRoom() {
+            username = document.getElementById("username").value.trim();
+            currentRoom = document.getElementById("room").value.trim();
+            if (!username || !currentRoom) {
+                alert("Username and room code are required.");
+                return;
+            }
+
+            userColor = getRandomColor(); // Get a random color for the user
+            const roomRef = ref(db, `rooms/${currentRoom}`);
+
+            get(roomRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert("Joined the room successfully!");
+                    listenForMessages();
+                } else {
+                    alert("Room does not exist. Please create a new room.");
+                }
+            });
+        }
+
+        function listenForMessages() {
+            const roomRef = ref(db, `rooms/${currentRoom}/messages`);
+
+            onChildAdded(roomRef, (snapshot) => {
+                const message = snapshot.val().text;
+                const messageUsername = snapshot.val().username;
+                const messageColor = snapshot.val().color; // Get the color from the message
+                const messageContainer = document.getElementById("messages");
+                const messageElement = document.createElement("div");
+                messageElement.className = "message";
+                messageElement.innerHTML = `<p style="color: ${messageColor};"><strong>${messageUsername}:</strong> ${message}</p>`;
+                messageContainer.appendChild(messageElement);
+            });
+
+            document.getElementById("message").style.display = 'block';
+            document.getElementById("sendMessageButton").style.display = 'inline-block';
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById("message");
+            const message = messageInput.value.trim();
+            if (message && currentRoom && username) {
+                const messagesRef = ref(db, `rooms/${currentRoom}/messages`);
+                push(messagesRef, {
+                    username: username,
+                    text: message,
+                    color: userColor // Send the user's color with the message
+                });
+                messageInput.value = "";
+            }
+        }
+
+        document.getElementById("createRoomButton").addEventListener("click", createRoom);
+        document.getElementById("joinRoomButton").addEventListener("click", joinRoom);
+        document.getElementById("sendMessageButton").addEventListener("click", sendMessage);
+
+        function toggleTheme() {
+            const isDarkMode = document.body.classList.toggle("dark-mode");
+            document.getElementById("themeToggleButton").textContent = isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+            const inputs = document.querySelectorAll('.nes-input');
+            inputs.forEach(input => {
+                input.classList.toggle('is-dark', isDarkMode);
+            });
+
+            const buttons = document.querySelectorAll('.nes-btn');
+            buttons.forEach(button => {
+                button.classList.toggle('is-dark', isDarkMode);
+            });
+
+            const messagesContainer = document.getElementById("messagesContainer");
+            messagesContainer.classList.toggle('is-dark', isDarkMode);
+        }
+
+        window.onload = function () {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-mode");
+                document.getElementById("themeToggleButton").textContent = "☀️ Light Mode";
+                toggleTheme(); // Apply dark mode styles
+            }
+        };
+
+        document.getElementById("themeToggleButton").addEventListener("click", toggleTheme);
+    </script>
+</body>
+</html>
